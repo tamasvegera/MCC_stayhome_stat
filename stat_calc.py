@@ -39,6 +39,7 @@ def check_block(block):
     print(str(block) + " checked")
 
 def init_files():
+    global stat, checked_accounts
     # open or create stat and checked_accounts files
     try:
         stat_file = open("stat.txt", "r")
