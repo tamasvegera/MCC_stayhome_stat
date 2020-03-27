@@ -39,7 +39,7 @@ try:
     stat_file = open("stat.txt", "r")
     stat = json.loads(stat_file.read())
     stat_file.close()
-except FileNotFoundError:
+except:
     stat_file = open("stat.txt", "w")
     stat_file.write(json.dumps(stat))
     stat_file.close()
@@ -48,7 +48,7 @@ try:
     checked_accounts_file = open("checked_accounts.txt", "r")
     checked_accounts = json.loads(checked_accounts_file.read())
     checked_accounts_file.close()
-except FileNotFoundError:
+except:
     checked_accounts_file = open("checked_accounts.txt", "w")
     checked_accounts_file.write(json.dumps(checked_accounts))
     checked_accounts_file.close()
