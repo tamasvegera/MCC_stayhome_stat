@@ -75,4 +75,5 @@ def send_payment(from_account, to_account, amount, payload):
         elif response["error"]["code"] == 1005:       # invalid public key -> orphan
             raise WalletPubKeyError
         else:
+            print(response)
             raise Exception
