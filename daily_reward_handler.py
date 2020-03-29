@@ -17,17 +17,19 @@ def send_daily_reward(account, reward):
     pass
 
 def daily_reward():
+    global coins_per_hour, daily_reward_account
+
     print("Checking daily rewards")
 
     accounts = stat_calc.get_accounts()
 
     for account in accounts:
         for hour in reward_chart:
-            if account["today_reward"] >= hour*coins_per_hour:
-                reward = account["today_reward"] * reward_chart[hour]/100
+            if accounts[account]["today_reward"] >= hour*coins_per_hour:
+                reward = accounts[account]["today_reward"] * reward_chart[hour]/100
                 try:
                     send_daily_reward(account, reward)
-                    account["today_reward"] = 0
+                    accounts[account]["today_reward"] = 0
                     stat_calc.add_daily_reward_to_sum(reward)
                 except Exception as e:
                     print("ERROR: sending daily reward to: " + account + ", amount: ")
