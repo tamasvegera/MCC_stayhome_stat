@@ -3,12 +3,43 @@ import wallet_json_rpc, json, time
 main_account = 1
 stat_first_block = 229000
 needed_payload = "4D617261646A204F7474686F6E"       # Maradj Otthon
-stat = {"last_checked_block":stat_first_block-1, "sum_coins": 0}
+stat = {"last_checked_block":stat_first_block-1, "sum_basic_rewards": 0, "sum_daily_rewards": 0}
 checked_accounts = []
 
+first_scan_done = False
+
+def is_first_scan_done():
+    return first_scan_done
+
+def get_accounts():
+    return checked_accounts
+
 def get_stat():
-    temp_stat = {"distributed_coins":stat["sum_coins"], "distributed_accounts": len(checked_accounts)}
+    temp_stat = {"distributed_basic_reward":stat["sum_basic_rewards"], "distributed_daily_reward": stat["sum_daily_rewards"], "distributed_accounts": len(checked_accounts)}
     return temp_stat
+
+def add_daily_reward_to_sum(reward):
+    stat["sum_daily_rewards"] += reward
+
+def check_op(op):
+    global stat, checked_accounts
+
+    if op["payload"] == needed_payload and op["account"] == main_account:
+        # adding coins to sum
+        stat["sum_basic_rewards"] += op["amount"] * (-1)  # sending coins is a negative value
+
+        rewarded_account = str(op["dest_account"])
+
+        # create new account if it's new. Sum_reward is not used yet.
+        if rewarded_account not in checked_accounts:
+            checked_accounts[rewarded_account] = {"sum_reward": op["amount"] * (-1), "today_reward": 0}
+
+        else:
+            checked_accounts[rewarded_account]["sum_reward"] += op["amount"] * (-1)
+
+        # if this operation happened today then add to today_reward
+        if int(op["time"] / 86400) == int(time.time() / 86400):
+            checked_accounts[rewarded_account]["today_reward"] += op["amount"] * (-1)
 
 def check_block(block):
     global stat, checked_accounts
@@ -17,13 +48,7 @@ def check_block(block):
 
     #iterating through operations in a block
     for op in ops:
-        if op["payload"] == needed_payload and op["account"] == main_account:
-            # adding coins to sum
-            stat["sum_coins"] += op["amount"]*(-1)      # sending coins is a negative value
-
-            # store account as checked
-            if op["dest_account"] not in checked_accounts:
-                checked_accounts.append(op["dest_account"])
+        check_op(op)
 
     stat["last_checked_block"] = block
 
@@ -67,5 +92,6 @@ def block_checker():
         if stat["last_checked_block"] != current_block:
             for block in range(stat["last_checked_block"] + 1, current_block):
                 check_block(block)
-                print("Sum coins: " + str(stat["sum_coins"]) + "    Accounts count: " + str(len(checked_accounts)))
+                print("Sum coins: " + str(stat["sum_basic_rewards"]) + "    Accounts count: " + str(len(checked_accounts)))
+        first_scan_done = True
         time.sleep(10)
