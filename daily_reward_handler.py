@@ -13,7 +13,7 @@ reward_chart = {        #   daily hour, reward %
 
 def send_daily_reward(account, reward):
     print("Sending daily reward: account:   " + account + " reward: " +str(reward))
-    wallet_json_rpc.send_payment(daily_reward_account, account, reward, "StayHome daily reward")
+   #wallet_json_rpc.send_payment(daily_reward_account, account, reward, "StayHome daily reward")
     pass
 
 def daily_reward():

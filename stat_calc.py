@@ -4,7 +4,7 @@ main_account = 1
 stat_first_block = 229000
 needed_payload = "4D617261646A204F7474686F6E"       # Maradj Otthon
 stat = {"last_checked_block":stat_first_block-1, "sum_basic_rewards": 0, "sum_daily_rewards": 0}
-checked_accounts = []
+checked_accounts = {}
 
 first_scan_done = False
 
