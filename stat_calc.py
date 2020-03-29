@@ -9,6 +9,8 @@ checked_accounts = {}
 first_scan_done = False
 
 def is_first_scan_done():
+    global first_scan_done
+
     return first_scan_done
 
 def get_accounts():
@@ -86,7 +88,7 @@ def init_files():
 
 def block_checker():
     global first_scan_done
-    
+
     # iterating through blocks till current block
     # checking last_block for eternity
     while True:
