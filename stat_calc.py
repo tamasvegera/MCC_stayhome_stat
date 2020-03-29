@@ -85,6 +85,8 @@ def init_files():
         checked_accounts_file.close()
 
 def block_checker():
+    global first_scan_done
+    
     # iterating through blocks till current block
     # checking last_block for eternity
     while True:
