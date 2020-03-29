@@ -61,9 +61,9 @@ def send_payment(from_account, to_account, amount, payload):
     from_account = int(from_account)
     to_account = int(to_account)
     amount = float(amount)
-    
-    payload = payload.encode('utf-8')
-    msg = {"jsonrpc":"2.0","method":"sendto","params":{"sender":from_account,"target":to_account,"amount":amount,"fee":basic_payment_fee,"payload":payload.hex(),"payload_method":"none","pwd":wallet_password},"id":123}
+
+    payload = payload.encode('hex')
+    msg = {"jsonrpc":"2.0","method":"sendto","params":{"sender":from_account,"target":to_account,"amount":amount,"fee":basic_payment_fee,"payload":payload,"payload_method":"none","pwd":wallet_password},"id":123}
     response_raw = requests.post(wallet_server_ip_port, json=msg)
     response = json.loads(response_raw.text)
 
