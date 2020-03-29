@@ -14,13 +14,19 @@ def is_first_scan_done():
     return first_scan_done
 
 def get_accounts():
+    global checked_accounts
+
     return checked_accounts
 
 def get_stat():
+    global stat, checked_accounts
+
     temp_stat = {"distributed_basic_reward":stat["sum_basic_rewards"], "distributed_daily_reward": stat["sum_daily_rewards"], "distributed_accounts": len(checked_accounts)}
     return temp_stat
 
 def add_daily_reward_to_sum(reward):
+    global stat
+
     stat["sum_daily_rewards"] += reward
 
 def check_op(op):
